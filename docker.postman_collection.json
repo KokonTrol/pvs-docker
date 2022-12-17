@@ -1,0 +1,531 @@
+{
+	"info": {
+		"_postman_id": "167719a8-7c40-4993-be6c-80a6537e4b85",
+		"name": "docker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15770217"
+	},
+	"item": [
+		{
+			"name": "iot about",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4041/iot/about",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4041",
+					"path": [
+						"iot",
+						"about"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create entity",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "fiware-service",
+						"value": "openiot",
+						"type": "text"
+					},
+					{
+						"key": "fiware-servicepath",
+						"value": "/",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"services\": [\r\n   {\r\n     \"apikey\":      \"4jggokgpepnvsb2uv4s40d59ov\",\r\n     \"cbroker\":     \"http://orion:1026\",\r\n     \"entity_type\": \"Status\",\r\n     \"resource\":    \"/iot/d\"\r\n   }\r\n ]\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4041/iot/services",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4041",
+					"path": [
+						"iot",
+						"services"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create object",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "fiware-service",
+						"value": "openiot",
+						"type": "text"
+					},
+					{
+						"key": "fiware-servicepath",
+						"value": "/",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"devices\": [\r\n   {\r\n     \"device_id\":   \"status001\",\r\n     \"entity_name\": \"urn:ngsi-ld:Status:001\",\r\n     \"entity_type\": \"Status\",\r\n     \"attributes\": [\r\n       { \"object_id\": \"is_occupied\", \"name\": \"is_occupied\", \"type\": \"Bollean\" },\r\n       { \"object_id\": \"has_problems\", \"name\": \"has_problems\", \"type\": \"Bollean\" }\r\n     ],\r\n     \"static_attributes\": [\r\n       { \"name\":\"name\", \"type\": \"String\", \"value\": \"PC1\"}\r\n     ]\r\n   }\r\n ]\r\n}"
+				},
+				"url": {
+					"raw": "http://localhost:4041/iot/devices",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4041",
+					"path": [
+						"iot",
+						"devices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get data by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "fiware-service",
+						"value": "openiot",
+						"type": "text"
+					},
+					{
+						"key": "fiware-servicepath",
+						"value": "/",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:1026/v2/entities/urn:ngsi-ld:Status:001?type=Status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1026",
+					"path": [
+						"v2",
+						"entities",
+						"urn:ngsi-ld:Status:001"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "Status"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all data",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Fiware-Service",
+						"value": "openiot",
+						"type": "text"
+					},
+					{
+						"key": "servicepath",
+						"value": "/",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:1026/v2/entities",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1026",
+					"path": [
+						"v2",
+						"entities"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "subscribe is_occupied",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "fiware-service",
+						"value": "openiot",
+						"type": "text"
+					},
+					{
+						"key": "fiware-servicepath",
+						"value": "/",
+						"type": "text"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"description\": \"STH subscription is_occupied\",\r\n    \"subject\": {\r\n        \"entities\": [\r\n            {\r\n                \"idPattern\": \"Status.*\"\r\n            }\r\n        ],\r\n        \"condition\": {\r\n            \"attrs\": [\r\n                \"is_occupied\"\r\n            ]\r\n        }\r\n    },\r\n    \"notification\": {\r\n        \"http\": {\r\n            \"url\": \"http://sth-comet:8666/notify\"\r\n        },\r\n        \"attrs\": [\r\n            \"is_occupied\"\r\n        ],\r\n        \"attrsFormat\": \"legacy\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1026/v2/subscriptions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1026",
+					"path": [
+						"v2",
+						"subscriptions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "subscribe has_problems",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "fiware-service",
+						"value": "openiot",
+						"type": "text"
+					},
+					{
+						"key": "fiware-servicepath",
+						"value": "/",
+						"type": "text"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"description\": \"STH subscription has_problems\",\r\n    \"subject\": {\r\n        \"entities\": [\r\n            {\r\n                \"idPattern\": \"Status.*\"\r\n            }\r\n        ],\r\n        \"condition\": {\r\n            \"attrs\": [\r\n                \"has_problems\"\r\n            ]\r\n        }\r\n    },\r\n    \"notification\": {\r\n        \"http\": {\r\n            \"url\": \"http://sth-comet:8666/notify\"\r\n        },\r\n        \"attrs\": [\r\n            \"has_problems\"\r\n        ],\r\n        \"attrsFormat\": \"legacy\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1026/v2/subscriptions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1026",
+					"path": [
+						"v2",
+						"subscriptions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "subscribe check",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "fiware-service",
+						"value": "openiot",
+						"type": "text"
+					},
+					{
+						"key": "fiware-servicepath",
+						"value": "/",
+						"type": "text"
+					},
+					{
+						"key": "content-type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"description\": \"STH subscription\",\r\n    \"subject\": {\r\n        \"entities\": [\r\n            {\r\n                \"idPattern\": \"Status.*\"\r\n            }\r\n        ],\r\n        \"condition\": {\r\n            \"attrs\": [\r\n                \"is_occupied\",\r\n                \"has_problems\"\r\n            ]\r\n        }\r\n    },\r\n    \"notification\": {\r\n        \"http\": {\r\n            \"url\": \"http://sth-comet:8666/notify\"\r\n        },\r\n        \"attrs\": [\r\n            \"is_occupied\",\r\n            \"has_problems\"\r\n        ],\r\n        \"attrsFormat\": \"legacy\",\r\n        \"onlyChangedAttrs\": true\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:1026/v2/subscriptions",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "1026",
+					"path": [
+						"v2",
+						"subscriptions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post changes",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/plain",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "is_occupied|False"
+				},
+				"url": {
+					"raw": "http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=status001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "7896",
+					"path": [
+						"iot",
+						"d"
+					],
+					"query": [
+						{
+							"key": "k",
+							"value": "4jggokgpepnvsb2uv4s40d59ov"
+						},
+						{
+							"key": "i",
+							"value": "status001"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get notifies problems",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "fiware-service",
+						"value": "openiot",
+						"type": "text"
+					},
+					{
+						"key": "fiware-servicepath",
+						"value": "/",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:8666/STH/v2/entities/urn:ngsi-ld:Status:001/attrs/has_problems?type=Status&lastN=20",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8666",
+					"path": [
+						"STH",
+						"v2",
+						"entities",
+						"urn:ngsi-ld:Status:001",
+						"attrs",
+						"has_problems"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "Status"
+						},
+						{
+							"key": "lastN",
+							"value": "20"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete problems values",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "fiware-service",
+						"value": "openiot",
+						"type": "text"
+					},
+					{
+						"key": "fiware-servicepath",
+						"value": "/",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:8666/STH/v1/contextEntities/type/Status/id/urn:ngsi-ld:Status:001/attributes/has_problems",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8666",
+					"path": [
+						"STH",
+						"v1",
+						"contextEntities",
+						"type",
+						"Status",
+						"id",
+						"urn:ngsi-ld:Status:001",
+						"attributes",
+						"has_problems"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get notifies occupied",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "fiware-service",
+						"value": "openiot",
+						"type": "text"
+					},
+					{
+						"key": "fiware-servicepath",
+						"value": "/",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8666/STH/v2/entities/urn:ngsi-ld:Status:001/attrs/is_occupied?type=Status&lastN=20",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8666",
+					"path": [
+						"STH",
+						"v2",
+						"entities",
+						"urn:ngsi-ld:Status:001",
+						"attrs",
+						"is_occupied"
+					],
+					"query": [
+						{
+							"key": "type",
+							"value": "Status"
+						},
+						{
+							"key": "lastN",
+							"value": "20"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
