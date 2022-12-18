@@ -1,14 +1,12 @@
 from fastapi import FastAPI, Request  
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
 import requests
 import json
 import asyncio
 from fastapi import WebSocket
 
 from preparing import get_all_entity_id
-import logging
 
 app = FastAPI()
 templates = Jinja2Templates(directory="static")
@@ -28,6 +26,8 @@ subs_params = {
 }
 subs_path = 'http://localhost:8666/STH/v2/entities/'
 delete_subs_path = 'http://localhost:8666/STH/v1/contextEntities/type/Status/id'
+
+
 @app.get("/")
 async def root(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
@@ -45,7 +45,7 @@ def all_objects():
 async def is_occupied(websocket: WebSocket):
     await websocket.accept()
     while True:
-        await asyncio.sleep(2)
+        await asyncio.sleep(1)
         js = []
 
         for i in objects_id:
@@ -66,17 +66,3 @@ async def is_occupied(websocket: WebSocket):
 
         if len(js)>0:
             await websocket.send_json(js)
-
-    # return json.dumps({'is_occupied': True if attrValue=="True" else False})
-
-
-@app.get("/check/has_problems")
-def has_problems():
-    return FileResponse("index.html")
-
-def main():
-    global objects_id
-    objects_id = get_all_entity_id("Status")
-
-if __name__ == "__main__":
-    main()

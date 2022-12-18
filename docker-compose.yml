@@ -56,6 +56,30 @@ services:
       interval: 5s
 
 
+  sth-comet:
+    labels:
+      org.fiware: 'pc'
+    image: fiware/sth-comet
+    hostname: sth-comet
+    container_name: fiware-sth-comet
+    links:
+      - mongo-db
+    depends_on:
+      - mongo-db
+    expose:
+      - 8666
+    ports:
+      - 8666:8666
+    networks:
+      - default
+    environment:
+        - STH_HOST=0.0.0.0
+        - STH_PORT=8666
+        - DB_PREFIX=sth_
+        - DB_URI=mongo-db:27017
+        - LOGOPS_LEVEL=DEBUG
+
+
   # Tutorial acts as a series of dummy IoT Sensors over HTTP
   pc:
     labels:
@@ -81,39 +105,13 @@ services:
     environment:
       - "MONGO_URL=mongodb://mongo-db:27017"
       - "DEBUG=tutorial:*"
-      - "WEB_APP_PORT=${TUTORIAL_APP_PORT}" # Port used by the content provider proxy and web-app for viewing data
+      - "WEB_APP_PORT=3000" # Port used by the content provider proxy and web-app for viewing data
       - "IOTA_HTTP_HOST=iot-agent"
-      - "IOTA_HTTP_PORT=${IOTA_SOUTH_PORT}"
-      - "DUMMY_DEVICES_PORT=${TUTORIAL_DUMMY_DEVICE_PORT}" # Port used by the dummy IOT devices to receive commands
+      - "IOTA_HTTP_PORT=7896"
+      - "DUMMY_DEVICES_PORT=3001" # Port used by the dummy IOT devices to receive commands
       - "DUMMY_DEVICES_TRANSPORT=HTTP" # Default transport used by dummy Io devices
       - "DUMMY_DEVICES_API_KEY=4jggokgpepnvsb2uv4s40d59ov"
-      - "CONTEXT_BROKER=http://orion:${ORION_PORT}/v2" # URL of the context broker to update context
-      - "OPENWEATHERMAP_KEY_ID=<ADD_YOUR_KEY_ID>"
-      - "TWITTER_CONSUMER_KEY=<ADD_YOUR_CONSUMER_KEY>"
-      - "TWITTER_CONSUMER_SECRET=<ADD_YOUR_CONSUMER_SECRET>"
-
-  sth-comet:
-    labels:
-      org.fiware: 'pc'
-    image: fiware/sth-comet
-    hostname: sth-comet
-    container_name: fiware-sth-comet
-    links:
-      - mongo-db
-    depends_on:
-      - mongo-db
-    expose:
-      - 8666
-    ports:
-      - 8666:8666
-    networks:
-      - default
-    environment:
-        - STH_HOST=0.0.0.0
-        - STH_PORT=8666
-        - DB_PREFIX=sth_
-        - DB_URI=mongo-db:27017
-        - LOGOPS_LEVEL=DEBUG
+      - "CONTEXT_BROKER=http://orion:1026/v2" # URL of the context broker to update context
 
   # Database
   mongo-db:
